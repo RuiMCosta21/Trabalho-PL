@@ -40,3 +40,12 @@ O lexer diferencia entre uma Label e um inteiro para facilitar a análise sintá
 Deste modo:
 1. um inteiro no estado startLine é uma Label.
 1. Um "DO" levanta a flag ... que identifica o próximo inteiro como uma Label.
+
+
+
+
+NOTA: Segundo a bibliografia consultada, um identificador em Fortran 77 tem um limite
+de //inserir n caracteres.
+Por isso, ao identificar uma string de caracteres, palavras reservadas com comprimento
+menor que // n são resolvidas fazendo match com a lista. Palavras
+maiores que // n possuem a sua própria regra.
