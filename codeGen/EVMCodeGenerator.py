@@ -144,7 +144,6 @@ class CodeGenerator:
         code.append("PUSHI 1")
         code.append("SUB")
 
-        # load value from memory
         code.append("LOADN")
 
         return code
@@ -157,9 +156,9 @@ class CodeGenerator:
                 continue
 
             var_info = self.symbols.lookup(v)
-            code += (f"PUSHG {var_info['index']}")
+            code += [f"PUSHG {var_info['index']}"]
         
-        code += (f"MOD")
+        code += [f"MOD"]
         return code
 
     def gen_boolean(self, argument):
@@ -170,20 +169,66 @@ class CodeGenerator:
         return code
     
     def gen_cond_expression(self, left_expr, op, right_expr):
-        code = left_expr + right_expr
+        code = []
+        code += [f"//Starting condition expression"]
+        code += left_expr 
+        code += right_expr
 
         # vm não tem "NOTEQ"
         if op == "NOTEQ":
             code += ["EQUAL", "NOT"]
         else:
-            code += [op]
+            code += op
 
         return code
     
     def gen_condition(self, left_side, op_inst, right_side):
-        code = left_side + right_side + op_inst
+        code = []
+        code += [f"//Starting condition"]
+        code += left_side
+        code += right_side 
+        code += op_inst
+        return code
+    
+    def gen_GOTO(self, label, line_number):
+    
+        # Log the reference silently
+        self.symbols.reference_label(label, line_number)
+
+        # Instantly emit the text target instruction
+        code = [f"JUMP L{label}"]
         return code
 
+    def gen_if_statement(self, code_conditions, then_body, else_body=None):
+            if_id = self.symbols.new_label()
+
+            # Define internal jump targets
+            else_label = f"IEELSE{if_id}"
+            end_label = f"IEEND{if_id}"
+
+            code = []
+            code += [f"//Starting if Statement"]
+            code += code_conditions
+
+            # If condition is 0 (False), jump to ELSE (or END if no else)
+            if else_body:
+                code += [f"JZ {else_label}"]
+            else:
+                code += [f"JZ {end_label}"]
+
+            code += [f"//Then body"]
+            code += then_body
+
+            if else_body:
+                code += [f"JUMP {end_label}"]
+
+                code += [f"{else_label}:"]
+                code += else_body
+
+            code += [f"{end_label}:"]
+
+            code +=[f"//Finishing if statement"]
+            return code
                 
 
 

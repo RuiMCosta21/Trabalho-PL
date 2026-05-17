@@ -43,38 +43,38 @@ def parse(text):
 #       PRINT *, 'Fatorial de ', N, ': ', FAT
 #       END''')
 
-#parse('''      PROGRAM PRIMO
-#          INTEGER NUM, I
-#          LOGICAL ISPRIM
-#          PRINT *, 'Introduza um numero inteiro positivo:'
-#          READ *, NUM
-#          ISPRIM = .TRUE. 
-#          I = 2
-#    20    IF (I .LE. (NUM/2) .AND. ISPRIM) THEN
-#            IF (MOD(NUM, I) .EQ. 0) THEN
-#                ISPRIM = .FALSE.
-#            ENDIF
-#          I = I + 1
-#          GOTO 20
-#          ENDIF
-#          IF (ISPRIM) THEN
-#            PRINT *, NUM, ' e um numero primo'
-#          ELSE
-#            PRINT *, NUM, ' nao e um numero primo'
-#          ENDIF
-#          END''')
-# 
-parse('''      PROGRAM SOMAARR
-      INTEGER NUMS(5)
-      INTEGER I, SOMA
-      SOMA = 0
-      PRINT *, 'Introduza 5 numeros inteiros:'
-      DO 30 I = 1, 5
-      READ *, NUMS(I)
-      SOMA = SOMA + NUMS(I)
-30    CONTINUE
-      PRINT *, 'A soma dos numeros e: ', SOMA
+parse('''      PROGRAM PRIMO
+      INTEGER NUM, I
+      LOGICAL ISPRIM
+      PRINT *, 'Introduza um numero inteiro positivo:'
+      READ *, NUM
+      ISPRIM = .TRUE. 
+      I = 2
+20    IF (I .LE. (NUM/2) .AND. ISPRIM) THEN
+        IF (MOD(NUM, I) .EQ. 0) THEN
+            ISPRIM = .FALSE.
+        ENDIF
+      I = I + 1
+      GOTO 20
+      ENDIF
+      IF (ISPRIM) THEN
+        PRINT *, NUM, ' e um numero primo'
+      ELSE
+        PRINT *, NUM, ' nao e um numero primo'
+      ENDIF
       END''')
+# 
+# parse('''      PROGRAM SOMAARR
+#       INTEGER NUMS(5)
+#       INTEGER I, SOMA
+#       SOMA = 0
+#       PRINT *, 'Introduza 5 numeros inteiros:'
+#       DO 30 I = 1, 5
+#       READ *, NUMS(I)
+#       SOMA = SOMA + NUMS(I)
+# 30    CONTINUE
+#       PRINT *, 'A soma dos numeros e: ', SOMA
+#       END''')
 
 # parse('''      PROGRAM CONVERSOR
 #       INTEGER NUM, BASE, RESULT, CONVRT

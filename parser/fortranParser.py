@@ -36,18 +36,21 @@ def p_lines(p):
     Lines : Lines Line
           | Line
     """
-    # simply concatenate instructions from each statement
     if len(p) == 2:
       p[0] = p[1]
     else:
-      print(p[1])
       p[0] = p[1] + p[2]
     
 def p_line(p):
     r"""
     Line : Start Statement
     """
-    p[0] = p[2]
+    print(p[1], p[2])
+    if p[1] is not None:
+        p.parser.symbols.declare_label(p[1], p[2])
+        p[0] = [f"L{p[1]}:"] + p[2]
+    else:
+        p[0] = p[2]
     
 def p_start(p):
     r"""
@@ -55,7 +58,7 @@ def p_start(p):
           | 
     """
     if len(p) > 1:
-        p.parser.symbols.declare_var(p[1], "Label")
+        p[0] = p[1]
     
 def p_statement(p):
     # incompleto
@@ -65,6 +68,7 @@ def p_statement(p):
               | Assignment
               | Do_Statement
               | If_Statement
+              | Goto_statement
     """
     p[0] = p[1]
 
@@ -96,12 +100,10 @@ def p_type(p):
 
 def p_variables_multiple(p):
     r"Variables : Variables ',' Variable"
-    # Take the list from p[1] and append the new variable from p[3]
     p[0] = p[1] + [p[3]]
 
 def p_variables_single(p):
     r"Variables : Variable"
-    # Start a new list with the first variable found
     p[0] = [p[1]]
 
 def p_variable(p):
@@ -367,8 +369,10 @@ def p_Loop_Value(p):
 ################### If Statements #########################
 def p_if_statement(p):
     r"""
-    If_Statement : IF '(' Conditions ')' THEN Lines If_Continuation If_Termination
+    If_Statement : IF '(' Conditions ')' THEN Lines If_Continuation ENDIF
     """
+    p[0] = p.parser.codegen.gen_if_statement(p[3], p[6], p[7])
+
 def p_conditions(p):
     r"""
     Conditions : Conditions BoolOp Condition
@@ -446,11 +450,15 @@ def p_if_continuation(p):
     If_Continuation : ELSE Lines 
                     | 
     """
-def p_if_termination(p):
+    if len(p) > 2:
+        p[0] = p[2]
+
+def p_goto(p):
     r"""
-    If_Termination : GOTO LABEL ENDIF
-                   | ENDIF
+    Goto_statement : GOTO LABEL
     """
+    line_number = p.lineno(2)
+    p[0] = p.parser.codegen.gen_GOTO(p[2], line_number)
 
 class ParseError(Exception):
     pass

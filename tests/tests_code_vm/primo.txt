@@ -1,0 +1,62 @@
+PUSHI 0
+PUSHI 0
+PUSHI 0
+PUSHS "Introduza um numero inteiro positivo:"
+WRITES
+// Read begins
+READ
+ATOI
+STOREG 0
+PUSHI 1
+STOREL 2
+PUSHI 2
+STOREL 1
+L20:
+//Starting if Statement
+//Starting condition
+//Starting condition expression
+PUSHG 1
+PUSHG 0
+PUSHI 2
+DIV
+INFEQ
+PUSHG 2
+AND
+JZ IEEND2
+//Then body
+//Starting if Statement
+//Starting condition expression
+PUSHG 0
+PUSHG 1
+MOD
+PUSHI 0
+EQUAL
+JZ IEEND1
+//Then body
+PUSHI 0
+STOREL 2
+IEEND1:
+//Finishing if statement
+PUSHG 1
+PUSHI 1
+ADD
+STOREL 1
+JUMP L20
+IEEND2:
+//Finishing if statement
+//Starting if Statement
+PUSHG 2
+JZ IEELSE3
+//Then body
+PUSHG 0
+WRITEI
+PUSHS " e um numero primo"
+WRITES
+JUMP IEEND3
+IEELSE3:
+PUSHG 0
+WRITEI
+PUSHS " nao e um numero primo"
+WRITES
+IEEND3:
+//Finishing if statement
