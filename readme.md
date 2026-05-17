@@ -44,7 +44,7 @@ Deste modo:
 
 - Conflito no literal "/"
 O literal "/" serve como operador de divisão, mas também serve de
-separador numa declaração de um bloco COMMON. Foi também criada uma diferenciação entre os dois.
+separador numa declaração de blocos COMMON e DATA. Foi também criada uma diferenciação entre os dois.
 
 
 
