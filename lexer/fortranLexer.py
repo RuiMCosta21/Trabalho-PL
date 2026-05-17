@@ -42,9 +42,11 @@ reserved = ("program", "stop", "end",
             "subroutine", "call",
             "common",
             "block",
+            "print", "read", "write", 
+            "mod", "cos", "sen",
             "format")
 
-tokens = ("PROGRAM", "STOP", "END",
+tokens = ("PROGRAM", "NAME", "STOP", "END",
           "INT_IDEN", "REAL_IDEN", "DOUBLE_IDEN", "COMPLEX_IDEN", "LOGICAL_IDEN", "CHARACTER_IDEN",
           "IF", "THEN", "ELSE", "ELSEIF", "ENDIF",
           "DO", "CONTINUE", "ENDDO", "WHILE", "GOTO", "UNTIL", "DO_WHILE",
@@ -53,6 +55,8 @@ tokens = ("PROGRAM", "STOP", "END",
           "SUBROUTINE", "CALL",
           "COMMON", "SEPARATOR",
           "DATA", "BLOCK",
+          "PRINT", "READ", "WRITE",
+          "MOD", "COS", "SEN",
           "FORMAT", "FORMAT_CODE",
           "INT", "REAL", "DOUBLE", "COMPLEX", "LOGICAL", "CHARACTER",
           "PARAMETER", "IDEN",
@@ -62,10 +66,14 @@ tokens = ("PROGRAM", "STOP", "END",
           "LABEL",
           "comment")
 
-literals = ("=", "(", ")", ",", "'", "\"",
+literals = ("=", "(", ")", ",", "\"", "+", "-", "*",
             "$", "!", ":", "%", "&", "?", "\\", "<", ">")
 
-t_PROGRAM = r"PROGRAM|program"
+def t_PROGRAM(t):
+    r"PROGRAM|program"
+    t.lexer.name_flag = True
+    return t
+
 t_STOP = r"STOP|stop"
 t_END = r"END|end"
 
@@ -135,11 +143,14 @@ def t_DIMENSION(t):
 
 def t_FUNCTION(t):
     r"FUNCTION|function"
+    t.lexer.name_flag = True
     return t
+
 t_RETURN = r"RETURN|return"
 
 def t_SUBROUTINE(t):
     r"SUBROUTINE|subroutine"
+    t.lexer.name_flag = True
     return t
 
 t_CALL = r"CALL|call"
@@ -175,10 +186,8 @@ def t_formatState_RPAREN(t):
     t.lexer.begin('INITIAL') 
     return t
 
-t_ADD = r"\+"
-t_SUB = r"\-"
 t_EXPO = r"\*\*"
-t_MULT = r"\*"
+
 
 def t_DIV(t):
     r"\/"
@@ -208,14 +217,21 @@ def t_INT(t):
 
 
 t_LOGICAL = r"\.TRUE\.|\.FALSE\."
-t_CHARACTER = r"'['^]'"
+
+def t_CHARACTER(t):
+    r"'[^']*'"
+    return t
 
 def t_IDEN(t):
-    r"[a-zA-Z]([a-zA-Z0-9]{1,5})?"
-    # Check if the word is reserved
-    val = t.value.lower()
-    if val in reserved:
-        t.type = val.upper()
+    r"[a-zA-Z]([a-zA-Z0-9]*)?|[a-zA-Z]([a-zA-Z0-9]{1,5})?"
+    if t.lexer.name_flag == True:
+        t.type = "NAME"
+        t.lexer.name_flag = False
+    else:
+        # Check if the word is reserved
+        val = t.value.lower()
+        if val in reserved:
+            t.type = val.upper()
     return t
 
 t_PARAMETER = r"parameter"
@@ -239,6 +255,7 @@ def t_ANY_newline(t):
     t.lexer.previous_state = t.lexer.lexstate
     t.lexer.begin('startLine')
     t.lexer.separator_flag = False
+    t.lexer.name_flag = False
 
 def t_startLine_comment(t):
     r"[cC*].*"

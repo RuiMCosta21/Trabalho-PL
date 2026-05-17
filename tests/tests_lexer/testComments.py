@@ -1,5 +1,5 @@
 import doctest
-from lexer.tests.fortranLexer import fortranLexer
+from lexer.fortranLexer import fortranLexer
 
 def test_lexer(input_text):
     """
@@ -46,6 +46,7 @@ def test_lexer(input_text):
     fortranLexer.separator_flag = False
     fortranLexer.line_start = 0
     fortranLexer.previous_state = "INITIAL"
+    fortranLexer.name_flag = False
     #print([(tok.type, tok.value, tok.lineno, tok.lexpos) for tok in fortranLexer])
     return [(tok.type) for tok in fortranLexer]
 
