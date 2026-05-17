@@ -3,7 +3,9 @@
 
 ## Dificuldades encontradas
 - Análise léxica do formato fixo do Fortran 77
-Tendo escolhido o formato fixo do Fortran 77 a sua análise léxica foi implementada criando um estado exclusivo dentro do *lexer* (denominado *startLine*) que é ativado sempre que é encontrada uma mudança de linha "\n", e o qual é desativado quando atingimos o 7º caracter em cada linha. Este estado permite identificar inteiros no início da linha com o tipo "LABEL", bem como o caracter de continuação da linha anterior na coluna 6.
+Tendo escolhido o formato fixo do Fortran 77 a sua análise léxica foi implementada criando um estado exclusivo dentro do *lexer* (denominado *startLine*) que é ativado sempre que é encontrada uma mudança de linha "\n", 
+e o qual é desativado quando atingimos o 7º caracter em cada linha. 
+Este estado permite identificar inteiros no início da linha com o tipo "LABEL", bem como o caracter de continuação da linha anterior na coluna 6.
 
 - Funções pré-definidas (I/O, funções matemáticas) são idenficadas como tokens 
 - Optei por não implementar a tipagem implícita do Fortran 77 não apenas por uma questão de simplicidade, mas também por ser estúpida
@@ -47,10 +49,14 @@ O literal "/" serve como operador de divisão, mas também serve de
 separador numa declaração de blocos COMMON e DATA. Foi também criada uma diferenciação entre os dois.
 
 
-
-
 NOTA: Segundo a bibliografia consultada, um identificador em Fortran 77 tem um limite
 de //inserir n caracteres.
 Por isso, ao identificar uma string de caracteres, palavras reservadas com comprimento
 menor que // n são resolvidas fazendo match com a lista. Palavras
 maiores que // n possuem a sua própria regra.
+
+
+# Análise Semântica
+
+A Análise Semântica foi realizada implementando uma tabela de simbolos.
+Esta tabela de símbolos contém uma stack de frames
