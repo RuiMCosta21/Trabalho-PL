@@ -35,11 +35,16 @@ o estado anterior ao atual. Deste modo a execução da linha anterior
 não é interrompida pela mudança para o estado StartLine despoletada pela mudança de linha.
 
 No estado inicial, foram implementadas flags para resolver certas ambiguidades de tokens:
+
 - Conflito entre um inteiro e uma Label: 
 O lexer diferencia entre uma Label e um inteiro para facilitar a análise sintática.
 Deste modo:
 1. um inteiro no estado startLine é uma Label.
-1. Um "DO" levanta a flag ... que identifica o próximo inteiro como uma Label.
+2. Um "DO" levanta a flag ... que identifica o próximo inteiro como uma Label.
+
+- Conflito no literal "/"
+O literal "/" serve como operador de divisão, mas também serve de
+separador numa declaração de um bloco COMMON. Foi também criada uma diferenciação entre os dois.
 
 
 
