@@ -60,3 +60,10 @@ maiores que // n possuem a sua própria regra.
 
 A Análise Semântica foi realizada implementando uma tabela de simbolos.
 Esta tabela de símbolos contém uma stack de frames
+Sobre cada variável é guardada o seu identificador, o seu tipo,
+um booleano a marcar a inicialização e é lhe associada um índice 
+a ser utilizado na geração de código.
+Sobre um array é guardado isto tudo mais o seu tamanho.
+Uma variável é adicionada à tabela quando é declarada. 
+Uma variável é inicializada quando é alvo de uma atribuição, 
+o que também inclui ser argumento de uma função.
