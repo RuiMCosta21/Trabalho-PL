@@ -46,7 +46,7 @@ class SymbolTable:
     def get_tableSize(self):
         return self.__index_count
     
-     # return all declared symbols
+    # return all declared symbols
     def symbols(self, kind=None):
         scope = self.current_frame()
         if kind is None:
@@ -126,8 +126,7 @@ class SymbolTable:
     def reference_label(self, label_iden, line_no):
         """Called when a GOTO encounters a label. We just note it down for later."""
         current_frame = self.__label_stack[-1]
-        
-        # Log that this label was used, and remember where it happened for error reporting
+
         if label_iden not in current_frame["referenced"]:
             current_frame["referenced"][label_iden] = line_no
 
@@ -137,17 +136,13 @@ class SymbolTable:
         
         for label_iden, line_no in current_frame["referenced"].items():
             if label_iden not in current_frame["defined"]:
-                # The compiler pass is finishing this block, and the label never showed up!
                 raise Exception(f"Semantic Error at line {line_no}: Undeclared label: {label_iden}")
 
     def declare_fun(self, id, tpe, params):
-        # Search for the ID in the global/current scope
         frame = self.current_frame()
-
         if id in frame:
             entry = frame[id]
 
-            # Check if this was just a type declaration from an INTEGER/REAL statement
             if entry.get("kind") == "var" and entry.get("type") == tpe:
                 # Upgrade the existing entry to a function
                 entry["kind"] = "fun"
@@ -155,10 +150,8 @@ class SymbolTable:
                 entry["initialized"] = True 
                 return
             else:
-                # If it's already a function or a conflicting type, then error out
                 raise SemanticError(f"Duplicate function declaration: {id}")
 
-        # If not found at all, create it from scratch
         frame[id] = {
             "kind": "function",
             "type": tpe,
@@ -167,7 +160,6 @@ class SymbolTable:
         }
 
     def initialize(self, id):
-            # it's a tuple if initializing an array (Iden, size)
             base_id = id[0] if isinstance(id, tuple) else id
 
             for frame in reversed(self.__call_stack):
@@ -190,6 +182,7 @@ class SymbolTable:
     def new_label(self):
         self.__internal_label_count += 1
         return self.__internal_label_count
+    
     # -------------------------
     # Debug
     # -------------------------

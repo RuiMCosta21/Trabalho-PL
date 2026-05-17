@@ -194,15 +194,12 @@ class CodeGenerator:
     
         # Log the reference silently
         self.symbols.reference_label(label, line_number)
-
-        # Instantly emit the text target instruction
         code = [f"JUMP L{label}"]
         return code
 
     def gen_if_statement(self, code_conditions, then_body, else_body=None):
             if_id = self.symbols.new_label()
 
-            # Define internal jump targets
             else_label = f"IEELSE{if_id}"
             end_label = f"IEEND{if_id}"
 

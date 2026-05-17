@@ -61,7 +61,6 @@ def p_start(p):
         p[0] = p[1]
     
 def p_statement(p):
-    # incompleto
     r"""
     Statement : FuncCall
               | Declaration
